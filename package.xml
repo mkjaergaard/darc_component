@@ -1,0 +1,12 @@
+<package>
+  <name>darc_component</name>
+  <version>0.2.0</version>
+  <description>DARC Component Functionality</description>
+  <author>Morten Kjaergaard</author>
+  <maintainer email="none@none.com">Morten Kjaergaard</maintainer>
+  <license>BSD</license>
+  <build_depend>beam</build_depend>
+  <build_depend>darc_common</build_depend>
+  <build_depend>darc_ns</build_depend>
+  <build_depend>darc_pubsub</build_depend>
+</package>

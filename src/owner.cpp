@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Prevas A/S
+ * Copyright (c) 2011, Prevas A/S
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,91 +28,66 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC Owner class implementation
  *
  * \author Morten Kjaergaard
  */
 
-#pragma once
-
-#include <map>
-#include <darc/id.hpp>
+#include <darc/owner.hpp>
 
 namespace darc
 {
 
-class Owner;
-
-class Primitive
+void Owner::startPrimitives()
 {
-  friend class Owner;
-
-protected:
-  typedef enum {STOPPED, PAUSED, RUNNING} StateType;
-
-  StateType state_;
-  ID id_;
-  Owner * owner_;
-
-  static std::string empty_string_;
-
-  virtual void onPause() {}
-  virtual void onUnpause() {}
-  virtual void onStop() {}
-  virtual void onStart() {}
-  virtual void onAttach() {};
-
-  virtual void pause()
+  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
-    if( state_ == RUNNING )
-    {
-      state_ = PAUSED;
-      onPause();
-    }
+    it->second->start();
   }
+}
 
-  virtual void unpause()
+void Owner::stopPrimitives()
+{
+  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
-    if( state_ == PAUSED )
-    {
-      state_ = RUNNING;
-      onUnpause();
-    }
+    it->second->stop();
   }
+}
 
-  virtual void stop()
+void Owner::pausePrimitives()
+{
+  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
-    if( state_ != STOPPED )
-    {
-      state_ = STOPPED;
-      onStop();
-    }
+    it->second->pause();
   }
+}
 
-  virtual void start()
+void Owner::unpausePrimitives()
+{
+  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
-    if( state_ == STOPPED )
-    {
-      state_ = RUNNING;
-      onStart();
-    }
+    it->second->unpause();
   }
+}
 
-public:
-  Primitive(Owner * owner);
-
-  virtual ~Primitive()
-  {}
-
-  virtual const std::string& getInstanceName() { return empty_string_; }
-  virtual const char * getTypeName() { return ""; }
-  virtual const int getTypeID() { return 0; }
-
-  const ID& getID() const
+void Owner::triggerPrimitivesOnAttach()
+{
+  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
-    return id_;
+    it->second->onAttach();
   }
+}
 
-};
+int Owner::add(Primitive * item)
+{
+  list_.insert(PrimitiveListType::value_type(item->getID(), item));
+
+  // Trigger onAttach if the owner is already attached to a node
+  if(isAttached())
+  {
+    item->onAttach();
+  }
+  return 0;
+}
 
 }

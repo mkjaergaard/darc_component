@@ -33,38 +33,25 @@
  * \author Morten Kjaergaard
  */
 
-#ifndef __DARC_OWNER_H_INCLUDED__
-#define __DARC_OWNER_H_INCLUDED__
+#pragma once
 
 #include <boost/asio/io_service.hpp>
-#include <boost/weak_ptr.hpp>
-#include <darc/primitive.h>
+#include <darc/primitive.hpp>
 
 namespace darc
 {
-
-namespace python
-{
-class OwnerProxy;
-}
 
 class Node;
 
 class Owner
 {
-  friend class darc::python::OwnerProxy;
-
 protected:
-  typedef std::map<ID, boost::weak_ptr<Primitive> > PrimitiveListType;
+  typedef std::map<ID, Primitive*> PrimitiveListType;
   PrimitiveListType list_;
-
-  typedef std::map<int, int> PrimitiveTypeCountType;
-  PrimitiveTypeCountType type_count_;
 
 public:
   virtual boost::asio::io_service * getIOService() = 0;
   virtual const bool& isAttached() = 0;
-  virtual boost::shared_ptr<darc::Node> getNode() = 0;
   virtual const ID& getComponentID() = 0;
 
   void startPrimitives();
@@ -73,17 +60,6 @@ public:
   void unpausePrimitives();
   void triggerPrimitivesOnAttach();
   int add(Primitive * item);
-  virtual void startProfiling();
-  virtual void stopProfiling();
-
-  void addPrimitive(Primitive * prim)
-  {
-    // todo: replace calls;
-    add(prim);
-  }
-
 };
 
 }
-
-#endif

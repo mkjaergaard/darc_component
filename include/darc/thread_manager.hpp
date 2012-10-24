@@ -28,90 +28,29 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC Thread Manager class
  *
  * \author Morten Kjaergaard
  */
 
 #pragma once
 
-#include <map>
+#include <boost/thread.hpp>
+#include <darc/component_fwd.hpp>
 #include <darc/id.hpp>
 
 namespace darc
 {
 
-class Owner;
-
-class Primitive
+class ThreadManager
 {
-  friend class Owner;
-
 protected:
-  typedef enum {STOPPED, PAUSED, RUNNING} StateType;
-
-  StateType state_;
-  ID id_;
-  Owner * owner_;
-
-  static std::string empty_string_;
-
-  virtual void onPause() {}
-  virtual void onUnpause() {}
-  virtual void onStop() {}
-  virtual void onStart() {}
-  virtual void onAttach() {};
-
-  virtual void pause()
-  {
-    if( state_ == RUNNING )
-    {
-      state_ = PAUSED;
-      onPause();
-    }
-  }
-
-  virtual void unpause()
-  {
-    if( state_ == PAUSED )
-    {
-      state_ = RUNNING;
-      onUnpause();
-    }
-  }
-
-  virtual void stop()
-  {
-    if( state_ != STOPPED )
-    {
-      state_ = STOPPED;
-      onStop();
-    }
-  }
-
-  virtual void start()
-  {
-    if( state_ == STOPPED )
-    {
-      state_ = RUNNING;
-      onStart();
-    }
-  }
+  typedef std::map<ID, boost::shared_ptr<boost::thread> > ThreadList;
+  ThreadList thread_list_;
 
 public:
-  Primitive(Owner * owner);
-
-  virtual ~Primitive()
-  {}
-
-  virtual const std::string& getInstanceName() { return empty_string_; }
-  virtual const char * getTypeName() { return ""; }
-  virtual const int getTypeID() { return 0; }
-
-  const ID& getID() const
-  {
-    return id_;
-  }
+  void allocateThreadAndRun(ComponentPtr component);
+    void stopThread(ComponentPtr component);
 
 };
 

@@ -28,91 +28,30 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC Thread Manager class
  *
  * \author Morten Kjaergaard
  */
 
-#pragma once
-
-#include <map>
-#include <darc/id.hpp>
+#include <darc/thread_manager.hpp>
+#include <boost/make_shared.hpp>
+#include <darc/component.hpp>
 
 namespace darc
 {
 
-class Owner;
-
-class Primitive
+void ThreadManager::allocateThreadAndRun(ComponentPtr component)
 {
-  friend class Owner;
+  thread_list_[component->getID()] =
+    boost::make_shared<boost::thread>(boost::bind(&Component::work, component));
+}
 
-protected:
-  typedef enum {STOPPED, PAUSED, RUNNING} StateType;
-
-  StateType state_;
-  ID id_;
-  Owner * owner_;
-
-  static std::string empty_string_;
-
-  virtual void onPause() {}
-  virtual void onUnpause() {}
-  virtual void onStop() {}
-  virtual void onStart() {}
-  virtual void onAttach() {};
-
-  virtual void pause()
-  {
-    if( state_ == RUNNING )
-    {
-      state_ = PAUSED;
-      onPause();
-    }
-  }
-
-  virtual void unpause()
-  {
-    if( state_ == PAUSED )
-    {
-      state_ = RUNNING;
-      onUnpause();
-    }
-  }
-
-  virtual void stop()
-  {
-    if( state_ != STOPPED )
-    {
-      state_ = STOPPED;
-      onStop();
-    }
-  }
-
-  virtual void start()
-  {
-    if( state_ == STOPPED )
-    {
-      state_ = RUNNING;
-      onStart();
-    }
-  }
-
-public:
-  Primitive(Owner * owner);
-
-  virtual ~Primitive()
-  {}
-
-  virtual const std::string& getInstanceName() { return empty_string_; }
-  virtual const char * getTypeName() { return ""; }
-  virtual const int getTypeID() { return 0; }
-
-  const ID& getID() const
-  {
-    return id_;
-  }
-
-};
+void ThreadManager::stopThread(ComponentPtr component)
+{
+  assert(thread_list_.count(component->getID()) != 0);
+  component->stopWork();
+  thread_list_[component->getID()]->join();
+  thread_list_.erase(component->getID());
+}
 
 }

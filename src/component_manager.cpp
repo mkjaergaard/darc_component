@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Prevas A/S
+ * Copyright (c) 2011, Prevas A/S
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,91 +28,34 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC Node_Impl class
  *
  * \author Morten Kjaergaard
  */
 
-#pragma once
-
-#include <map>
-#include <darc/id.hpp>
+#include <darc/component_manager.hpp>
+#include <darc/component.hpp>
 
 namespace darc
 {
 
-class Owner;
-
-class Primitive
+void ComponentManager::attach(ComponentPtr component)
 {
-  friend class Owner;
+  assert(component_instances_.find(component->getID()) == component_instances_.end());
+  component_instances_[component->getID()] = component;
+  component->attachToManager(this);
+}
 
-protected:
-  typedef enum {STOPPED, PAUSED, RUNNING} StateType;
-
-  StateType state_;
-  ID id_;
-  Owner * owner_;
-
-  static std::string empty_string_;
-
-  virtual void onPause() {}
-  virtual void onUnpause() {}
-  virtual void onStop() {}
-  virtual void onStart() {}
-  virtual void onAttach() {};
-
-  virtual void pause()
+const ID& ComponentManager::lookupComponentInstance(const std::string& instance_name)
+{
+  for( ComponentInstancesList::iterator it = component_instances_.begin(); it != component_instances_.end(); it++ )
   {
-    if( state_ == RUNNING )
+    if( it->second->getName() == instance_name )
     {
-      state_ = PAUSED;
-      onPause();
+      return it->second->getComponentID();
     }
   }
-
-  virtual void unpause()
-  {
-    if( state_ == PAUSED )
-    {
-      state_ = RUNNING;
-      onUnpause();
-    }
-  }
-
-  virtual void stop()
-  {
-    if( state_ != STOPPED )
-    {
-      state_ = STOPPED;
-      onStop();
-    }
-  }
-
-  virtual void start()
-  {
-    if( state_ == STOPPED )
-    {
-      state_ = RUNNING;
-      onStart();
-    }
-  }
-
-public:
-  Primitive(Owner * owner);
-
-  virtual ~Primitive()
-  {}
-
-  virtual const std::string& getInstanceName() { return empty_string_; }
-  virtual const char * getTypeName() { return ""; }
-  virtual const int getTypeID() { return 0; }
-
-  const ID& getID() const
-  {
-    return id_;
-  }
-
-};
+  return ID::null();
+}
 
 }

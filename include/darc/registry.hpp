@@ -37,16 +37,18 @@
 
 #include <map>
 #include <boost/function.hpp>
-#include <darc/component_fwd.h>
-#include <darc/node.h>
+#include <darc/component_fwd.hpp>
+//#include <darc/component_manager_fwd.h>
 
 namespace darc
 {
 
+class ComponentManager;
+
 class Registry
 {
 private:
-  typedef boost::function<ComponentPtr(const std::string&, NodePtr)> InstantiateComponentMethod;
+  typedef boost::function<ComponentPtr(const std::string&, ComponentManager)> InstantiateComponentMethod;
   typedef std::map<const std::string, InstantiateComponentMethod> ComponentListType;
 
   ComponentListType component_list_;
@@ -59,7 +61,7 @@ private:
 
 public:
   static int registerComponent(const std::string& component_name, InstantiateComponentMethod method);
-  static darc::ComponentPtr instantiateComponent(const std::string& instance_name, NodePtr node);
+  static darc::ComponentPtr instantiateComponent(const std::string& instance_name, ComponentManager* mngr);
 
 };
 

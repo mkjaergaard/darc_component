@@ -33,53 +33,43 @@
  * \author Morten Kjaergaard
  */
 
-#ifndef __DARC_COMPONENT_H_INCLUDED__
-#define __DARC_COMPONENT_H_INCLUDED__
+#pragma once
 
 #include <boost/asio/io_service.hpp>
-#include <boost/asio/deadline_timer.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <darc/component_fwd.h>
-#include <darc/owner.h>
-#include <darc/enable_weak_from_static.h>
-#include <darc/node.h>
-#include <darc/id.h>
-#include <darc/registry.h>
-#include <darc/statistics/cpu_usage.h>
-#include <darc/statistics/thread_statistics.h>
+#include <darc/component_fwd.hpp>
+#include <darc/owner.hpp>
+#include <darc/id.hpp>
+#include <darc/component_manager.hpp>
 
 namespace darc
 {
 
-namespace python { class ComponentProxy; }
+class ComponentManager;
 
-class Component : public Owner, public EnableWeakFromStatic<Component>
+class Component : public Owner
 {
-  friend class python::ComponentProxy;
+  friend class ComponentManager;
 
 private:
   std::string name_;
-  NodePtr node_;
   bool attached_;
   boost::asio::io_service io_service_;
   boost::scoped_ptr<boost::asio::io_service::work> keep_alive_;
   ID id_;
 
-  // Statistics
-  statistics::CPUUsage cpu_usage_;
-  statistics::ThreadStatistics statistics_;
+  ComponentManager * mngr_;
 
 protected:
   Component();
-  void attachNode(const std::string& instance_name, NodePtr node);
+  void attachToManager(ComponentManager * mngr);
+  void setName(const std::string& instance_name);
+
   void triggerOnStart();
 
   virtual void onStart()
   {
   }
-
-  void startProfilingHandler();
-  void stopProfilingHandler();
 
 public:
   void run();
@@ -90,9 +80,6 @@ public:
   void work();
   void stopWork();
 
-  virtual void startProfiling();
-  virtual void stopProfiling();
-
   // impl of darc::Owner
   inline boost::asio::io_service * getIOService()
   {
@@ -102,13 +89,6 @@ public:
   inline const bool& isAttached()
   {
     return attached_;
-  }
-
-  // impl of darc::Owner
-  inline NodePtr getNode()
-  {
-    assert(attached_);
-    return node_;
   }
 
   // Getters
@@ -127,23 +107,24 @@ public:
     return id_;
   }
 
-  inline const statistics::ThreadStatistics& getStatistics()
-  {
-    return statistics_;
-  }
-
   // Method to instantiate components
   template<typename T>
-  static boost::shared_ptr<T> instantiate(const std::string& instance_name, NodePtr node)
-  {
-    boost::shared_ptr<T> instance(new T());
-    instance->attachNode(instance_name, node);
-    node->attach(instance);
-    return instance;
-  }
+  static boost::shared_ptr<T> instantiate(const std::string& instance_name, ComponentManager* mngr);
 
 };
 
 }
 
-#endif
+namespace darc
+{
+
+template<typename T>
+boost::shared_ptr<T> Component::instantiate(const std::string& instance_name, ComponentManager* mngr)
+{
+  boost::shared_ptr<T> instance(new T());
+  instance->setName(instance_name);
+  mngr->attach(instance);
+  return instance;
+}
+
+}

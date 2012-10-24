@@ -28,91 +28,20 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC Component Fwd Decl
  *
  * \author Morten Kjaergaard
  */
 
 #pragma once
 
-#include <map>
-#include <darc/id.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace darc
 {
 
-class Owner;
-
-class Primitive
-{
-  friend class Owner;
-
-protected:
-  typedef enum {STOPPED, PAUSED, RUNNING} StateType;
-
-  StateType state_;
-  ID id_;
-  Owner * owner_;
-
-  static std::string empty_string_;
-
-  virtual void onPause() {}
-  virtual void onUnpause() {}
-  virtual void onStop() {}
-  virtual void onStart() {}
-  virtual void onAttach() {};
-
-  virtual void pause()
-  {
-    if( state_ == RUNNING )
-    {
-      state_ = PAUSED;
-      onPause();
-    }
-  }
-
-  virtual void unpause()
-  {
-    if( state_ == PAUSED )
-    {
-      state_ = RUNNING;
-      onUnpause();
-    }
-  }
-
-  virtual void stop()
-  {
-    if( state_ != STOPPED )
-    {
-      state_ = STOPPED;
-      onStop();
-    }
-  }
-
-  virtual void start()
-  {
-    if( state_ == STOPPED )
-    {
-      state_ = RUNNING;
-      onStart();
-    }
-  }
-
-public:
-  Primitive(Owner * owner);
-
-  virtual ~Primitive()
-  {}
-
-  virtual const std::string& getInstanceName() { return empty_string_; }
-  virtual const char * getTypeName() { return ""; }
-  virtual const int getTypeID() { return 0; }
-
-  const ID& getID() const
-  {
-    return id_;
-  }
-
-};
+class Component;
+typedef boost::shared_ptr<Component> ComponentPtr;
+typedef boost::weak_ptr<Component> ComponentWkPtr;
 
 }

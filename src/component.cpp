@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Prevas A/S
+ * Copyright (c) 2011, Prevas A/S
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,91 +28,86 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC Component class
  *
  * \author Morten Kjaergaard
  */
 
-#pragma once
+#include <darc/component.hpp>
 
-#include <map>
-#include <darc/id.hpp>
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <darc/component_manager.hpp>
 
 namespace darc
 {
 
-class Owner;
-
-class Primitive
+Component::Component() :
+  name_(""),
+  attached_(false),
+  id_(ID::create())
 {
-  friend class Owner;
+}
 
-protected:
-  typedef enum {STOPPED, PAUSED, RUNNING} StateType;
+void Component::setName(const std::string& instance_name)
+{
+  assert(attached_ == false);
+  name_ = instance_name;
+}
 
-  StateType state_;
-  ID id_;
-  Owner * owner_;
+void Component::attachToManager(ComponentManager * mngr)
+{
+  assert(attached_ == false);
+  assert(name_ != "");
+  attached_ = true;
+  mngr_ = mngr;
+  triggerPrimitivesOnAttach();
+}
 
-  static std::string empty_string_;
+void Component::triggerOnStart()
+{
+  onStart();
+}
 
-  virtual void onPause() {}
-  virtual void onUnpause() {}
-  virtual void onStop() {}
-  virtual void onStart() {}
-  virtual void onAttach() {};
+void Component::run()
+{
+  assert(attached_);
+  mngr_->runComponent(id_);
+}
 
-  virtual void pause()
-  {
-    if( state_ == RUNNING )
-    {
-      state_ = PAUSED;
-      onPause();
-    }
-  }
+void Component::stop()
+{
+  assert(attached_);
+  mngr_->stopComponent(id_);
+}
 
-  virtual void unpause()
-  {
-    if( state_ == PAUSED )
-    {
-      state_ = RUNNING;
-      onUnpause();
-    }
-  }
+void Component::pause()
+{
+  pausePrimitives();
+}
 
-  virtual void stop()
-  {
-    if( state_ != STOPPED )
-    {
-      state_ = STOPPED;
-      onStop();
-    }
-  }
+void Component::unpause()
+{
+  unpausePrimitives();
+}
 
-  virtual void start()
-  {
-    if( state_ == STOPPED )
-    {
-      state_ = RUNNING;
-      onStart();
-    }
-  }
+void Component::work()
+{
+  beam::glog<beam::Info>("Running Component",
+			 "Name", beam::arg<std::string>(name_));
+  keep_alive_.reset( new boost::asio::io_service::work(io_service_) );
+  startPrimitives();
+  triggerOnStart();
+  io_service_.reset();
+  io_service_.run();
+  beam::glog<beam::Info>("Stopping Component",
+			 "Name", beam::arg<std::string>(name_));
+}
 
-public:
-  Primitive(Owner * owner);
-
-  virtual ~Primitive()
-  {}
-
-  virtual const std::string& getInstanceName() { return empty_string_; }
-  virtual const char * getTypeName() { return ""; }
-  virtual const int getTypeID() { return 0; }
-
-  const ID& getID() const
-  {
-    return id_;
-  }
-
-};
+void Component::stopWork()
+{
+  stopPrimitives();
+  keep_alive_.reset();
+}
 
 }

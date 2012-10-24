@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Prevas A/S
+ * Copyright (c) 2011, Prevas A/S
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,91 +28,54 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC Registry class
  *
  * \author Morten Kjaergaard
  */
 
-#pragma once
-
-#include <map>
-#include <darc/id.hpp>
+#include <darc/registry.h>
+#include <darc/log.h>
 
 namespace darc
 {
 
-class Owner;
-
-class Primitive
+Registry::Registry()
 {
-  friend class Owner;
+}
 
-protected:
-  typedef enum {STOPPED, PAUSED, RUNNING} StateType;
+Registry * Registry::instance_ = 0;
 
-  StateType state_;
-  ID id_;
-  Owner * owner_;
-
-  static std::string empty_string_;
-
-  virtual void onPause() {}
-  virtual void onUnpause() {}
-  virtual void onStop() {}
-  virtual void onStart() {}
-  virtual void onAttach() {};
-
-  virtual void pause()
+Registry * Registry::instance()
+{
+  // todo: better use a mutex
+  if( instance_ == 0 )
   {
-    if( state_ == RUNNING )
-    {
-      state_ = PAUSED;
-      onPause();
-    }
+    instance_ = new Registry();
   }
+  return instance_;
+}
 
-  virtual void unpause()
+int Registry::registerComponent(const std::string& component_name, InstantiateComponentMethod method)
+{
+  Registry * inst = instance();
+  inst->component_list_[component_name] = method;
+  DARC_INFO("Registered Component: %s", component_name.c_str());
+  return 1;
+}
+
+darc::ComponentPtr Registry::instantiateComponent(const std::string& instance_name, NodePtr node)
+{
+  Registry * inst = instance();
+  if( inst->component_list_.count(instance_name) )
   {
-    if( state_ == PAUSED )
-    {
-      state_ = RUNNING;
-      onUnpause();
-    }
+    DARC_INFO("Instantiating Component %s", instance_name.c_str());
+    return inst->component_list_[instance_name](instance_name, node);
   }
-
-  virtual void stop()
+  else
   {
-    if( state_ != STOPPED )
-    {
-      state_ = STOPPED;
-      onStop();
-    }
+    DARC_FATAL("Component not registered %s", instance_name.c_str());
+    return darc::ComponentPtr();
   }
-
-  virtual void start()
-  {
-    if( state_ == STOPPED )
-    {
-      state_ = RUNNING;
-      onStart();
-    }
-  }
-
-public:
-  Primitive(Owner * owner);
-
-  virtual ~Primitive()
-  {}
-
-  virtual const std::string& getInstanceName() { return empty_string_; }
-  virtual const char * getTypeName() { return ""; }
-  virtual const int getTypeID() { return 0; }
-
-  const ID& getID() const
-  {
-    return id_;
-  }
-
-};
+}
 
 }
