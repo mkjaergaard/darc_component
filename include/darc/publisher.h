@@ -28,110 +28,53 @@
  */
 
 /**
- * DARC Component class
+ * DARC Publisher class
  *
  * \author Morten Kjaergaard
  */
 
 #pragma once
 
-#include <boost/asio/io_service.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <darc/component_fwd.hpp>
+#include <darc/primitive.hpp>
 #include <darc/owner.hpp>
-#include <darc/id.hpp>
-#include <darc/component_manager.hpp>
-
-namespace darc
-{
-
-class ComponentManager;
-
-class Component : public Owner
-{
-  friend class ComponentManager;
-
-private:
-  std::string name_;
-  bool attached_;
-  boost::asio::io_service io_service_;
-  boost::scoped_ptr<boost::asio::io_service::work> keep_alive_;
-  ID id_;
-
-  ComponentManager * mngr_;
-
-protected:
-  Component();
-  void attachToManager(ComponentManager * mngr);
-  void setName(const std::string& instance_name);
-
-  void triggerOnStart();
-
-  virtual void onStart()
-  {
-  }
-
-public:
-  void run();
-  void stop();
-  void pause();
-  void unpause();
-
-  void work();
-  void stopWork();
-
-  // impl of darc::Owner
-  inline boost::asio::io_service * getIOService()
-  {
-    return &io_service_;
-  }
-
-  inline ComponentManager* component_manager()
-  {
-    assert(attached_);
-    return mngr_;
-  }
-
-
-  inline const bool& isAttached()
-  {
-    return attached_;
-  }
-
-  // Getters
-  inline const std::string getName() const
-  {
-    return name_;
-  }
-
-  inline const ID& getComponentID()
-  {
-    return id_;
-  }
-
-  inline const ID& getID()
-  {
-    return id_;
-  }
-
-  // Method to instantiate components
-  template<typename T>
-  static boost::shared_ptr<T> instantiate(const std::string& instance_name, ComponentManager* mngr);
-
-};
-
-}
 
 namespace darc
 {
 
 template<typename T>
-boost::shared_ptr<T> Component::instantiate(const std::string& instance_name, ComponentManager* mngr)
+class publisher : public darc::Primitive
 {
-  boost::shared_ptr<T> instance(new T());
-  instance->setName(instance_name);
-  mngr->attach(instance);
-  return instance;
-}
+protected:
+  std::string topic_;
+  darc::Publisher<T> pub_;
+
+public:
+  publisher(darc::Owner* owner, const std::string& topic) :
+    darc::Primitive(owner),
+    topic_(topic)
+  {
+  }
+
+  void publish(boost::shared_ptr<const T> msg)
+  {
+    pub_.publish(msg);
+  }
+
+  void onAttach()
+  {
+    pub_ = darc::Publisher<T>(*owner_->getIOService(), owner_->component_manager()->message_service());
+  }
+
+  void onStart()
+  {
+    pub_.attach(topic_);
+  }
+
+  void onStop()
+  {
+    pub_.detach();
+  }
+
+};
 
 }

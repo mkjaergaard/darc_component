@@ -37,6 +37,7 @@
 
 #include <boost/asio/io_service.hpp>
 #include <darc/primitive.hpp>
+#include <darc/component_manager.hpp>
 
 namespace darc
 {
@@ -53,6 +54,7 @@ public:
   virtual boost::asio::io_service * getIOService() = 0;
   virtual const bool& isAttached() = 0;
   virtual const ID& getComponentID() = 0;
+  virtual ComponentManager* component_manager() = 0;
 
   void startPrimitives();
   void stopPrimitives();

@@ -43,9 +43,6 @@
 namespace darc
 {
 
-namespace timer
-{
-
 class PeriodicTimer : public darc::Primitive, public boost::asio::deadline_timer
 {
 public:
@@ -134,5 +131,4 @@ protected:
 
 };
 
-}
 }

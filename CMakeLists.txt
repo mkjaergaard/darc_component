@@ -8,7 +8,7 @@ catkin_package(
   LIBRARIES darc_component
 )
 
-find_package(catkin REQUIRED COMPONENTS beam darc_pubsub darc_common)
+find_package(catkin REQUIRED COMPONENTS beam darc_pubsub darc_common darc_ns)
 find_package(Boost REQUIRED COMPONENTS system)
 
 
@@ -35,8 +35,12 @@ target_link_libraries(my_component1 darc_component)
 add_executable(my_node1
   test/node1.cpp
 )
-
 target_link_libraries(my_node1 darc_component -lzmq)
+
+add_executable(my_node2
+  test/node2.cpp
+)
+target_link_libraries(my_node2 darc_component -lzmq)
 
 # Add test cpp file
 #catkin_add_gtest(darc_common_gtest_buffer test/buffer_gtest.cpp)

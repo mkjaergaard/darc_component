@@ -45,6 +45,9 @@
 #include <darc/network/network_manager.hpp>
 #include <beam/glog.hpp>
 #include <darc/thread_manager.hpp>
+#include <darc/distributed_container/container_manager.hpp>
+#include <darc/ns_service.hpp>
+#include <darc/message_service.hpp>
 
 namespace darc
 {
@@ -58,6 +61,11 @@ private:
   darc::peer peer_;
   darc::network::network_manager network_mngr_;
 
+  // services
+  darc::distributed_container::container_manager container_manager_;
+  darc::ns_service ns_service_;
+  darc::MessageService message_service_;
+
   typedef std::map<ID, ComponentPtr> ComponentInstancesList;
   ComponentInstancesList component_instances_;
 
@@ -65,8 +73,16 @@ private:
 
 public:
   ComponentManager() :
-    network_mngr_(io_service_, peer_)
+    network_mngr_(io_service_, peer_),
+    container_manager_(peer_),
+    ns_service_(peer_, &container_manager_),
+    message_service_(peer_, io_service_, ns_service_)
   {
+  }
+
+  MessageService& message_service()
+  {
+    return message_service_;
   }
 
 protected:
