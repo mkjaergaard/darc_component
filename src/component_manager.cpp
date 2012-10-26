@@ -39,14 +39,14 @@
 namespace darc
 {
 
-void ComponentManager::attach(ComponentPtr component)
+void component_manager::attach(ComponentPtr component)
 {
   assert(component_instances_.find(component->getID()) == component_instances_.end());
   component_instances_[component->getID()] = component;
   component->attachToManager(this);
 }
 
-const ID& ComponentManager::lookupComponentInstance(const std::string& instance_name)
+const ID& component_manager::lookupComponentInstance(const std::string& instance_name)
 {
   for( ComponentInstancesList::iterator it = component_instances_.begin(); it != component_instances_.end(); it++ )
   {

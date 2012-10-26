@@ -28,7 +28,7 @@
  */
 
 /**
- * DARC Owner class implementation
+ * DARC owner class implementation
  *
  * \author Morten Kjaergaard
  */
@@ -38,52 +38,52 @@
 namespace darc
 {
 
-void Owner::startPrimitives()
+void owner::start_primitives()
 {
-  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
+  for(primitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
     it->second->start();
   }
 }
 
-void Owner::stopPrimitives()
+void owner::stop_primitives()
 {
-  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
+  for(primitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
     it->second->stop();
   }
 }
 
-void Owner::pausePrimitives()
+void owner::pauseprimitives()
 {
-  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
+  for(primitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
     it->second->pause();
   }
 }
 
-void Owner::unpausePrimitives()
+void owner::unpause_primitives()
 {
-  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
+  for(primitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
     it->second->unpause();
   }
 }
 
-void Owner::triggerPrimitivesOnAttach()
+void owner::trigger_on_attach()
 {
-  for(PrimitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
+  for(primitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
     it->second->onAttach();
   }
 }
 
-int Owner::add(Primitive * item)
+int owner::add(primitive * item)
 {
-  list_.insert(PrimitiveListType::value_type(item->getID(), item));
+  list_.insert(primitiveListType::value_type(item->getID(), item));
 
   // Trigger onAttach if the owner is already attached to a node
-  if(isAttached())
+  if(is_attached())
   {
     item->onAttach();
   }

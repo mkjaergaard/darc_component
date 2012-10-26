@@ -43,7 +43,7 @@
 namespace darc
 {
 
-class PeriodicTimer : public darc::Primitive, public boost::asio::deadline_timer
+class PeriodicTimer : public darc::primitive, public boost::asio::deadline_timer
 {
 public:
   typedef boost::function<void()> CallbackType;
@@ -59,8 +59,8 @@ protected:
 public:
   template<typename T>
   PeriodicTimer(T * owner, void (T::*callback)(), boost::posix_time::time_duration period) :
-    darc::Primitive(owner),
-    boost::asio::deadline_timer(*(owner->getIOService()), period),
+    darc::primitive(owner),
+    boost::asio::deadline_timer(*(owner->io_service()), period),
     callback_(boost::bind(callback, owner)),
     period_(period)
   {

@@ -6,7 +6,7 @@
 int main(int argc, const char** argv)
 {
   beam::glog<beam::Info>("Node Running");
-  darc::ComponentManager mngr;
+  darc::component_manager mngr;
   mngr.accept("zmq+tcp://127.0.0.1:5002");
   mngr.connect("zmq+tcp://127.0.0.1:5001");
 

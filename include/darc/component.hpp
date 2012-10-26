@@ -45,11 +45,9 @@
 namespace darc
 {
 
-class ComponentManager;
-
-class Component : public Owner
+class Component : public owner
 {
-  friend class ComponentManager;
+  friend class component_manager;
 
 private:
   std::string name_;
@@ -58,11 +56,11 @@ private:
   boost::scoped_ptr<boost::asio::io_service::work> keep_alive_;
   ID id_;
 
-  ComponentManager * mngr_;
+  darc::component_manager * mngr_;
 
 protected:
   Component();
-  void attachToManager(ComponentManager * mngr);
+  void attachToManager(darc::component_manager * mngr);
   void setName(const std::string& instance_name);
 
   void triggerOnStart();
@@ -80,20 +78,20 @@ public:
   void work();
   void stopWork();
 
-  // impl of darc::Owner
-  inline boost::asio::io_service * getIOService()
+  // impl of darc::owner
+  inline boost::asio::io_service * io_service()
   {
     return &io_service_;
   }
 
-  inline ComponentManager* component_manager()
+  inline darc::component_manager* component_manager()
   {
     assert(attached_);
     return mngr_;
   }
 
 
-  inline const bool& isAttached()
+  inline const bool& is_attached()
   {
     return attached_;
   }
@@ -116,7 +114,7 @@ public:
 
   // Method to instantiate components
   template<typename T>
-  static boost::shared_ptr<T> instantiate(const std::string& instance_name, ComponentManager* mngr);
+  static boost::shared_ptr<T> instantiate(const std::string& instance_name, darc::component_manager* mngr);
 
 };
 
@@ -126,7 +124,7 @@ namespace darc
 {
 
 template<typename T>
-boost::shared_ptr<T> Component::instantiate(const std::string& instance_name, ComponentManager* mngr)
+boost::shared_ptr<T> Component::instantiate(const std::string& instance_name, darc::component_manager* mngr)
 {
   boost::shared_ptr<T> instance(new T());
   instance->setName(instance_name);

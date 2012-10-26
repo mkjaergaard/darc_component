@@ -28,7 +28,7 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC primitive class
  *
  * \author Morten Kjaergaard
  */
@@ -39,7 +39,7 @@
 namespace darc
 {
 
-Primitive::Primitive(Owner * owner):
+primitive::primitive(owner * owner):
   state_(STOPPED),
   id_(ID::create()),
   owner_(owner)
@@ -47,6 +47,6 @@ Primitive::Primitive(Owner * owner):
   owner->add(this);
 }
 
-std::string Primitive::empty_string_ = "";
+std::string primitive::empty_string_ = "";
 
 }

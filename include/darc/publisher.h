@@ -42,15 +42,15 @@ namespace darc
 {
 
 template<typename T>
-class publisher : public darc::Primitive
+class publisher : public darc::primitive
 {
 protected:
   std::string topic_;
   darc::Publisher<T> pub_;
 
 public:
-  publisher(darc::Owner* owner, const std::string& topic) :
-    darc::Primitive(owner),
+  publisher(darc::owner* owner, const std::string& topic) :
+    darc::primitive(owner),
     topic_(topic)
   {
   }
@@ -62,7 +62,7 @@ public:
 
   void onAttach()
   {
-    pub_ = darc::Publisher<T>(*owner_->getIOService(), owner_->component_manager()->message_service());
+    pub_ = darc::Publisher<T>(*owner_->io_service(), owner_->component_manager()->message_service());
   }
 
   void onStart()

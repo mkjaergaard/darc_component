@@ -52,7 +52,7 @@
 namespace darc
 {
 
-class ComponentManager
+class component_manager
 {
 private:
   boost::asio::io_service io_service_;
@@ -72,7 +72,7 @@ private:
   ThreadManager thread_manager_;
 
 public:
-  ComponentManager() :
+  component_manager() :
     network_mngr_(io_service_, peer_),
     container_manager_(peer_),
     ns_service_(peer_, &container_manager_),
@@ -88,7 +88,7 @@ public:
 protected:
   void work()
   {
-    beam::glog<beam::Info>("Running ComponentManager");
+    beam::glog<beam::Info>("Running component_manager");
     boost::asio::io_service::work keep_alive(io_service_);
     io_service_.run();
   }
@@ -96,7 +96,7 @@ protected:
 public:
   void run()
   {
-    node_thread_ = boost::thread( boost::bind(&ComponentManager::work, this) );
+    node_thread_ = boost::thread( boost::bind(&component_manager::work, this) );
   }
 
   void runCurrentThread()

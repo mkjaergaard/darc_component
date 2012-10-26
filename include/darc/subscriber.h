@@ -43,7 +43,7 @@ namespace darc
 {
 
 template<typename T>
-class subscriber : public darc::Primitive
+class subscriber : public darc::primitive
 {
 protected:
   std::string topic_;
@@ -52,10 +52,10 @@ protected:
   typename Subscriber<T>::callback_functor_type handler_;
 
 public:
-  subscriber(darc::Owner* owner,
+  subscriber(darc::owner* owner,
 	     const std::string& topic,
 	     typename Subscriber<T>::callback_functor_type handler) :
-    darc::Primitive(owner),
+    darc::primitive(owner),
     topic_(topic),
     handler_(handler)
   {
@@ -63,7 +63,7 @@ public:
 
   void onAttach()
   {
-    sub_ = darc::Subscriber<T>(*owner_->getIOService(), owner_->component_manager()->message_service());
+    sub_ = darc::Subscriber<T>(*owner_->io_service(), owner_->component_manager()->message_service());
     sub_.addCallback(handler_);
   }
 

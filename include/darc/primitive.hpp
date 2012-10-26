@@ -28,7 +28,7 @@
  */
 
 /**
- * DARC Primitive class
+ * DARC primitive class
  *
  * \author Morten Kjaergaard
  */
@@ -41,18 +41,18 @@
 namespace darc
 {
 
-class Owner;
+class owner;
 
-class Primitive
+class primitive
 {
-  friend class Owner;
+  friend class owner;
 
 protected:
   typedef enum {STOPPED, PAUSED, RUNNING} StateType;
 
   StateType state_;
   ID id_;
-  Owner * owner_;
+  owner * owner_;
 
   static std::string empty_string_;
 
@@ -99,9 +99,9 @@ protected:
   }
 
 public:
-  Primitive(Owner * owner);
+  primitive(owner * owner);
 
-  virtual ~Primitive()
+  virtual ~primitive()
   {}
 
   virtual const std::string& getInstanceName() { return empty_string_; }

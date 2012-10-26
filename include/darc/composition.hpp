@@ -46,17 +46,17 @@
 namespace darc
 {
 
-class Composition : public Owner, public Primitive
+class Composition : public owner, public primitive
 {
 protected:
-  Owner * parent_;
+  owner * parent_;
 
 protected:
-  Composition(Owner * parent):
-    Primitive(parent),
+  Composition(owner * parent):
+    primitive(parent),
     parent_(parent)
   {
-    parent->addPrimitive(this);
+    parent->addprimitive(this);
   }
 
   virtual ~Composition()
@@ -64,53 +64,53 @@ protected:
   }
 
 public:
-  // impl of darc::Owner
-  inline boost::asio::io_service * getIOService()
+  // impl of darc::owner
+  inline boost::asio::io_service * io_service()
   {
-    return parent_->getIOService();
+    return parent_->io_service();
   }
 
-  inline const bool& isAttached()
+  inline const bool& is_attached()
   {
-    return parent_->isAttached();
+    return parent_->is_attached();
   }
 
-  // impl of darc::Owner
+  // impl of darc::owner
   inline boost::shared_ptr<Node> getNode()
   {
     return parent_->getNode();
   }
 
-  // impl of darc::Owner
+  // impl of darc::owner
   const ID& getComponentID()
   {
     return parent_->getComponentID();
   }
 
-  // Override of Primitive methods
+  // Override of primitive methods
   virtual void start()
   {
-    Owner::startPrimitives();
+    owner::start_primitives();
   }
 
   virtual void stop()
   {
-    Owner::stopPrimitives();
+    owner::stop_primitives();
   }
 
   virtual void pause()
   {
-    Owner::pausePrimitives();
+    owner::pauseprimitives();
   }
 
   virtual void unpause()
   {
-    Owner::unpausePrimitives();
+    owner::unpause_primitives();
   }
 
   virtual void onAttach()
   {
-    triggerPrimitivesOnAttach();
+    trigger_on_attach();
   }
 
 };

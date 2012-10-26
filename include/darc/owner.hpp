@@ -28,7 +28,7 @@
  */
 
 /**
- * DARC Owner class
+ * DARC owner class
  *
  * \author Morten Kjaergaard
  */
@@ -44,24 +44,24 @@ namespace darc
 
 class Node;
 
-class Owner
+class owner
 {
 protected:
-  typedef std::map<ID, Primitive*> PrimitiveListType;
-  PrimitiveListType list_;
+  typedef std::map<ID, primitive*> primitiveListType;
+  primitiveListType list_;
 
 public:
-  virtual boost::asio::io_service * getIOService() = 0;
-  virtual const bool& isAttached() = 0;
+  virtual boost::asio::io_service * io_service() = 0;
+  virtual const bool& is_attached() = 0;
   virtual const ID& getComponentID() = 0;
-  virtual ComponentManager* component_manager() = 0;
+  virtual component_manager* component_manager() = 0;
 
-  void startPrimitives();
-  void stopPrimitives();
-  void pausePrimitives();
-  void unpausePrimitives();
-  void triggerPrimitivesOnAttach();
-  int add(Primitive * item);
+  void start_primitives();
+  void stop_primitives();
+  void pauseprimitives();
+  void unpause_primitives();
+  void trigger_on_attach();
+  int add(primitive * item);
 };
 
 }

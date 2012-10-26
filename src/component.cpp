@@ -55,13 +55,13 @@ void Component::setName(const std::string& instance_name)
   name_ = instance_name;
 }
 
-void Component::attachToManager(ComponentManager * mngr)
+void Component::attachToManager(darc::component_manager * mngr)
 {
   assert(attached_ == false);
   assert(name_ != "");
   attached_ = true;
   mngr_ = mngr;
-  triggerPrimitivesOnAttach();
+  trigger_on_attach();
 }
 
 void Component::triggerOnStart()
@@ -83,12 +83,12 @@ void Component::stop()
 
 void Component::pause()
 {
-  pausePrimitives();
+  pauseprimitives();
 }
 
 void Component::unpause()
 {
-  unpausePrimitives();
+  unpause_primitives();
 }
 
 void Component::work()
@@ -96,7 +96,7 @@ void Component::work()
   beam::glog<beam::Info>("Running Component",
 			 "Name", beam::arg<std::string>(name_));
   keep_alive_.reset( new boost::asio::io_service::work(io_service_) );
-  startPrimitives();
+  start_primitives();
   triggerOnStart();
   io_service_.reset();
   io_service_.run();
@@ -106,7 +106,7 @@ void Component::work()
 
 void Component::stopWork()
 {
-  stopPrimitives();
+  stop_primitives();
   keep_alive_.reset();
 }
 
