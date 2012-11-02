@@ -32,6 +32,21 @@ add_library(my_component1
 target_link_libraries(my_component1 darc_component)
 
 
+add_executable(my_ping_pong_node
+  test/ping_pong_node.cpp
+)
+target_link_libraries(my_ping_pong_node darc_component -lzmq)
+
+add_executable(my_ping_node
+  test/ping_node.cpp
+)
+target_link_libraries(my_ping_node darc_component -lzmq)
+
+add_executable(my_pong_node
+  test/pong_node.cpp
+)
+target_link_libraries(my_pong_node darc_component -lzmq)
+
 add_executable(my_node1
   test/node1.cpp
 )
