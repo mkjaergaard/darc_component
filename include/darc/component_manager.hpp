@@ -47,7 +47,7 @@
 #include <darc/thread_manager.hpp>
 #include <darc/distributed_container/container_manager.hpp>
 #include <darc/ns_service.hpp>
-#include <darc/message_service.hpp>
+#include <darc/pubsub/message_service.hpp>
 
 namespace darc
 {
@@ -64,7 +64,7 @@ private:
   // services
   darc::distributed_container::container_manager container_manager_;
   darc::ns_service ns_service_;
-  darc::MessageService message_service_;
+  darc::pubsub::MessageService message_service_;
 
   typedef std::map<ID, ComponentPtr> ComponentInstancesList;
   ComponentInstancesList component_instances_;
@@ -80,7 +80,7 @@ public:
   {
   }
 
-  MessageService& message_service()
+  pubsub::MessageService& message_service()
   {
     return message_service_;
   }

@@ -37,6 +37,7 @@
 
 #include <darc/primitive.hpp>
 #include <darc/owner.hpp>
+#include <darc/pubsub/publisher.hpp>
 
 namespace darc
 {
@@ -46,7 +47,7 @@ class publisher : public darc::primitive
 {
 protected:
   std::string topic_;
-  darc::Publisher<T> pub_;
+  darc::pubsub::Publisher<T> pub_;
 
 public:
   publisher(darc::owner* owner, const std::string& topic) :
@@ -62,7 +63,7 @@ public:
 
   void onAttach()
   {
-    pub_ = darc::Publisher<T>(*owner_->io_service(), owner_->component_manager()->message_service());
+    pub_ = pubsub::Publisher<T>(*owner_->io_service(), owner_->component_manager()->message_service());
   }
 
   void onStart()

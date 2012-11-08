@@ -37,7 +37,7 @@
 
 #include <darc/primitive.hpp>
 #include <darc/owner.hpp>
-#include <darc/subscriber.hpp>
+#include <darc/pubsub/subscriber.hpp>
 
 namespace darc
 {
@@ -47,14 +47,14 @@ class subscriber : public darc::primitive
 {
 protected:
   std::string topic_;
-  darc::Subscriber<T> sub_;
+  pubsub::Subscriber<T> sub_;
 
-  typename Subscriber<T>::callback_functor_type handler_;
+  typename pubsub::Subscriber<T>::callback_functor_type handler_;
 
 public:
   subscriber(darc::owner* owner,
 	     const std::string& topic,
-	     typename Subscriber<T>::callback_functor_type handler) :
+	     typename pubsub::Subscriber<T>::callback_functor_type handler) :
     darc::primitive(owner),
     topic_(topic),
     handler_(handler)
@@ -63,7 +63,7 @@ public:
 
   void onAttach()
   {
-    sub_ = darc::Subscriber<T>(*owner_->io_service(), owner_->component_manager()->message_service());
+    sub_ = pubsub::Subscriber<T>(*owner_->io_service(), owner_->component_manager()->message_service());
     sub_.addCallback(handler_);
   }
 
