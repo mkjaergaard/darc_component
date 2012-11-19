@@ -64,7 +64,7 @@ private:
   // services
   darc::distributed_container::container_manager container_manager_;
   darc::ns_service ns_service_;
-  pubsub::MessageService message_service_;
+  pubsub::message_service message_service_;
 
   typedef std::map<ID, component_ptr> ComponentInstancesList;
   ComponentInstancesList component_instances_;
@@ -80,7 +80,7 @@ public:
   {
   }
 
-  pubsub::MessageService& get_message_service()
+  pubsub::message_service& get_message_service()
   {
     return message_service_;
   }

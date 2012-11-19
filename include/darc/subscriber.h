@@ -47,14 +47,14 @@ class subscriber : public darc::primitive
 {
 protected:
   std::string topic_;
-  pubsub::Subscriber<T> sub_;
+  pubsub::subscriber<T> sub_;
 
-  typename pubsub::Subscriber<T>::callback_functor_type handler_;
+  typename pubsub::subscriber<T>::callback_functor_type handler_;
 
 public:
   subscriber(darc::owner* owner,
 	     const std::string& topic,
-	     typename pubsub::Subscriber<T>::callback_functor_type handler) :
+	     typename pubsub::subscriber<T>::callback_functor_type handler) :
     darc::primitive(owner),
     topic_(topic),
     handler_(handler)
@@ -63,7 +63,7 @@ public:
 
   void on_attach()
   {
-    sub_ = pubsub::Subscriber<T>(*owner_->io_service(), owner_->get_component_manager()->get_message_service());
+    sub_ = pubsub::subscriber<T>(*owner_->io_service(), owner_->get_component_manager()->get_message_service());
     sub_.addCallback(handler_);
   }
 
