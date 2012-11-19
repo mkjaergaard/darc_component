@@ -40,16 +40,16 @@
 namespace darc
 {
 
-void ThreadManager::allocateThreadAndRun(ComponentPtr component)
+void thread_manager::allocate_thread_and_run(component_ptr component)
 {
   thread_list_[component->getID()] =
-    boost::make_shared<boost::thread>(boost::bind(&Component::work, component));
+    boost::make_shared<boost::thread>(boost::bind(&component::work, component));
 }
 
-void ThreadManager::stopThread(ComponentPtr component)
+void thread_manager::stop_thread(component_ptr component)
 {
   assert(thread_list_.count(component->getID()) != 0);
-  component->stopWork();
+  component->stop_work();
   thread_list_[component->getID()]->join();
   thread_list_.erase(component->getID());
 }

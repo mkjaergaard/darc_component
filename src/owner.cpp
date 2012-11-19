@@ -74,18 +74,18 @@ void owner::trigger_on_attach()
 {
   for(primitiveListType::iterator it = list_.begin(); it != list_.end(); it++)
   {
-    it->second->onAttach();
+    it->second->on_attach();
   }
 }
 
 int owner::add(primitive * item)
 {
-  list_.insert(primitiveListType::value_type(item->getID(), item));
+  list_.insert(primitiveListType::value_type(item->get_id(), item));
 
   // Trigger onAttach if the owner is already attached to a node
   if(is_attached())
   {
-    item->onAttach();
+    item->on_attach();
   }
   return 0;
 }

@@ -56,7 +56,7 @@ protected:
     primitive(parent),
     parent_(parent)
   {
-    parent->addprimitive(this);
+    parent->add_primitive(this);
   }
 
   virtual ~Composition()
@@ -84,7 +84,7 @@ public:
   // impl of darc::owner
   const ID& getComponentID()
   {
-    return parent_->getComponentID();
+    return parent_->get_id();
   }
 
   // Override of primitive methods
@@ -108,7 +108,7 @@ public:
     owner::unpause_primitives();
   }
 
-  virtual void onAttach()
+  virtual void on attach()
   {
     trigger_on_attach();
   }

@@ -42,20 +42,21 @@
 namespace darc
 {
 
-Component::Component() :
+component::component() :
   name_(""),
   attached_(false),
-  id_(ID::create())
+  id_(ID::create()),
+  mngr_(0)
 {
 }
 
-void Component::setName(const std::string& instance_name)
+void component::set_name(const std::string& instance_name)
 {
   assert(attached_ == false);
   name_ = instance_name;
 }
 
-void Component::attachToManager(darc::component_manager * mngr)
+void component::attach_to_manager(darc::component_manager * mngr)
 {
   assert(attached_ == false);
   assert(name_ != "");
@@ -64,47 +65,47 @@ void Component::attachToManager(darc::component_manager * mngr)
   trigger_on_attach();
 }
 
-void Component::triggerOnStart()
+void component::trigger_on_start()
 {
-  onStart();
+  on_start();
 }
 
-void Component::run()
-{
-  assert(attached_);
-  mngr_->runComponent(id_);
-}
-
-void Component::stop()
+void component::run()
 {
   assert(attached_);
-  mngr_->stopComponent(id_);
+  mngr_->run_component(id_);
 }
 
-void Component::pause()
+void component::stop()
+{
+  assert(attached_);
+  mngr_->stop_component(id_);
+}
+
+void component::pause()
 {
   pauseprimitives();
 }
 
-void Component::unpause()
+void component::unpause()
 {
   unpause_primitives();
 }
 
-void Component::work()
+void component::work()
 {
   beam::glog<beam::Info>("Running Component",
 			 "Name", beam::arg<std::string>(name_));
   keep_alive_.reset( new boost::asio::io_service::work(io_service_) );
   start_primitives();
-  triggerOnStart();
+  trigger_on_start();
   io_service_.reset();
   io_service_.run();
   beam::glog<beam::Info>("Stopping Component",
 			 "Name", beam::arg<std::string>(name_));
 }
 
-void Component::stopWork()
+void component::stop_work()
 {
   stop_primitives();
   keep_alive_.reset();

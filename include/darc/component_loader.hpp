@@ -41,11 +41,11 @@
 namespace darc
 {
 
-class ComponentLoader
+class component_loader
 {
 public:
 
-  static void loadComponent(const std::string& file)
+  static void load_component(const std::string& file)
   {
     std::cout << "Loading: " << file << std::endl;
 

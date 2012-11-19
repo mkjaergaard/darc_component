@@ -4,9 +4,9 @@
 #include "../include/darc/publisher.h"
 #include "../include/darc/subscriber.h"
 
-class my_component1 : public darc::Component
+class my_component1 : public darc::component
 {
-  darc::PeriodicTimer timer_;
+  darc::periodic_timer timer_;
   darc::publisher<int> pub_;
   darc::subscriber<int> sub_;
 

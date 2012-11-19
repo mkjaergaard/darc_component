@@ -45,7 +45,7 @@
 namespace darc
 {
 
-class Component : public owner
+class component : public owner
 {
   friend class component_manager;
 
@@ -59,13 +59,13 @@ private:
   darc::component_manager * mngr_;
 
 protected:
-  Component();
-  void attachToManager(darc::component_manager * mngr);
-  void setName(const std::string& instance_name);
+  component();
+  void attach_to_manager(darc::component_manager * mngr);
+  void set_name(const std::string& instance_name);
 
-  void triggerOnStart();
+  void trigger_on_start();
 
-  virtual void onStart()
+  virtual void on_start()
   {
   }
 
@@ -76,7 +76,7 @@ public:
   void unpause();
 
   void work();
-  void stopWork();
+  void stop_work();
 
   // impl of darc::owner
   inline boost::asio::io_service * io_service()
@@ -84,7 +84,7 @@ public:
     return &io_service_;
   }
 
-  inline darc::component_manager* component_manager()
+  inline darc::component_manager* get_component_manager()
   {
     assert(attached_);
     return mngr_;
@@ -97,12 +97,12 @@ public:
   }
 
   // Getters
-  inline const std::string getName() const
+  inline const std::string get_name() const
   {
     return name_;
   }
 
-  inline const ID& getComponentID()
+  inline const ID& get_id()
   {
     return id_;
   }
@@ -124,10 +124,10 @@ namespace darc
 {
 
 template<typename T>
-boost::shared_ptr<T> Component::instantiate(const std::string& instance_name, darc::component_manager* mngr)
+boost::shared_ptr<T> component::instantiate(const std::string& instance_name, darc::component_manager* mngr)
 {
   boost::shared_ptr<T> instance(new T());
-  instance->setName(instance_name);
+  instance->set_name(instance_name);
   mngr->attach(instance);
   return instance;
 }

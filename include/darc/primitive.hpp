@@ -56,18 +56,18 @@ protected:
 
   static std::string empty_string_;
 
-  virtual void onPause() {}
-  virtual void onUnpause() {}
-  virtual void onStop() {}
-  virtual void onStart() {}
-  virtual void onAttach() {};
+  virtual void on_pause() {}
+  virtual void on_unpause() {}
+  virtual void on_stop() {}
+  virtual void on_start() {}
+  virtual void on_attach() {};
 
   virtual void pause()
   {
     if( state_ == RUNNING )
     {
       state_ = PAUSED;
-      onPause();
+      on_pause();
     }
   }
 
@@ -76,7 +76,7 @@ protected:
     if( state_ == PAUSED )
     {
       state_ = RUNNING;
-      onUnpause();
+      on_unpause();
     }
   }
 
@@ -85,7 +85,7 @@ protected:
     if( state_ != STOPPED )
     {
       state_ = STOPPED;
-      onStop();
+      on_stop();
     }
   }
 
@@ -94,7 +94,7 @@ protected:
     if( state_ == STOPPED )
     {
       state_ = RUNNING;
-      onStart();
+      on_start();
     }
   }
 
@@ -104,11 +104,11 @@ public:
   virtual ~primitive()
   {}
 
-  virtual const std::string& getInstanceName() { return empty_string_; }
-  virtual const char * getTypeName() { return ""; }
-  virtual const int getTypeID() { return 0; }
+  virtual const std::string& get_instance_nameme() { return empty_string_; }
+  virtual const char * get_type_name() { return ""; }
+  virtual const int get_type_id() { return 0; }
 
-  const ID& getID() const
+  const ID& get_id() const
   {
     return id_;
   }

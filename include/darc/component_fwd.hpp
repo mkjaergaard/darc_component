@@ -40,8 +40,7 @@
 namespace darc
 {
 
-class Component;
-typedef boost::shared_ptr<Component> ComponentPtr;
-typedef boost::weak_ptr<Component> ComponentWkPtr;
+class component;
+typedef boost::shared_ptr<component> component_ptr;
 
 }

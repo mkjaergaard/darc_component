@@ -4,9 +4,9 @@
 #include "../include/darc/publisher.h"
 #include "../include/darc/subscriber.h"
 
-class my_ping_component : public darc::Component
+class my_ping_component : public darc::component
 {
-  darc::PeriodicTimer timer_;
+  darc::periodic_timer timer_;
   darc::publisher<int> ping_pub_;
   darc::subscriber<int> pong_sub_;
 

@@ -4,7 +4,7 @@
 #include "../include/darc/publisher.h"
 #include "../include/darc/subscriber.h"
 
-class my_pong_component : public darc::Component
+class my_pong_component : public darc::component
 {
   darc::publisher<int> pong_pub_;
   darc::subscriber<int> ping_sub_;

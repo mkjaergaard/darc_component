@@ -10,8 +10,8 @@ int main(int argc, const char** argv)
   mngr.accept("zmq+tcp://127.0.0.1:5001");
   mngr.connect("zmq+tcp://127.0.0.1:5002");
 
-  darc::ComponentPtr c1 = darc::Component::instantiate<my_component1>("myc", &mngr);
+  darc::component_ptr c1 = darc::component::instantiate<my_component1>("myc", &mngr);
   c1->run();
 
-  mngr.runCurrentThread();
+  mngr.run_current_thread();
 }

@@ -39,11 +39,11 @@
 #include <boost/thread.hpp>
 #include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp>
+#include <beam/glog.hpp>
 #include <darc/component_fwd.hpp>
 #include <darc/registry.hpp>
 #include <darc/peer.hpp>
 #include <darc/network/network_manager.hpp>
-#include <beam/glog.hpp>
 #include <darc/thread_manager.hpp>
 #include <darc/distributed_container/container_manager.hpp>
 #include <darc/ns_service.hpp>
@@ -64,12 +64,12 @@ private:
   // services
   darc::distributed_container::container_manager container_manager_;
   darc::ns_service ns_service_;
-  darc::pubsub::MessageService message_service_;
+  pubsub::MessageService message_service_;
 
-  typedef std::map<ID, ComponentPtr> ComponentInstancesList;
+  typedef std::map<ID, component_ptr> ComponentInstancesList;
   ComponentInstancesList component_instances_;
 
-  ThreadManager thread_manager_;
+  thread_manager thread_manager_;
 
 public:
   component_manager() :
@@ -80,7 +80,7 @@ public:
   {
   }
 
-  pubsub::MessageService& message_service()
+  pubsub::MessageService& get_message_service()
   {
     return message_service_;
   }
@@ -99,23 +99,23 @@ public:
     node_thread_ = boost::thread( boost::bind(&component_manager::work, this) );
   }
 
-  void runCurrentThread()
+  void run_current_thread()
   {
     work();
   }
 
-  void attach(ComponentPtr component);
+  void attach(component_ptr component);
 
-  void runComponent(const ID& id)
+  void run_component(const ID& id)
   {
     assert(component_instances_.count(id) > 0);
-    thread_manager_.allocateThreadAndRun(component_instances_[id]);
+    thread_manager_.allocate_thread_and_run(component_instances_[id]);
   }
 
-  void stopComponent(const ID& id)
+  void stop_component(const ID& id)
   {
     assert(component_instances_.count(id) > 0);
-    thread_manager_.stopThread(component_instances_[id]);
+    thread_manager_.stop_thread(component_instances_[id]);
   }
 
   void accept(const std::string& url)
@@ -128,7 +128,7 @@ public:
     network_mngr_.connect( url);
   }
 
-  const ID& lookupComponentInstance(const std::string& instance_name);
+  const ID& lookup_component_instance(const std::string& instance_name);
 
 };
 

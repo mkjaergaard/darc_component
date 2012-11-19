@@ -61,17 +61,17 @@ public:
     pub_.publish(msg);
   }
 
-  void onAttach()
+  void on_attach()
   {
-    pub_ = pubsub::Publisher<T>(*owner_->io_service(), owner_->component_manager()->message_service());
+    pub_ = pubsub::Publisher<T>(*owner_->io_service(), owner_->get_component_manager()->get_message_service());
   }
 
-  void onStart()
+  void on_start()
   {
     pub_.attach(topic_);
   }
 
-  void onStop()
+  void on_stop()
   {
     pub_.detach();
   }

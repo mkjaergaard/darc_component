@@ -63,7 +63,7 @@ int Registry::registerComponent(const std::string& component_name, InstantiateCo
   return 1;
 }
 
-darc::ComponentPtr Registry::instantiateComponent(const std::string& instance_name, NodePtr node)
+darc::component_ptr Registry::instantiateComponent(const std::string& instance_name, NodePtr node)
 {
   Registry * inst = instance();
   if( inst->component_list_.count(instance_name) )
@@ -74,7 +74,7 @@ darc::ComponentPtr Registry::instantiateComponent(const std::string& instance_na
   else
   {
     DARC_FATAL("Component not registered %s", instance_name.c_str());
-    return darc::ComponentPtr();
+    return darc::component_ptr();
   }
 }
 

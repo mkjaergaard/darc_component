@@ -43,13 +43,13 @@
 namespace darc
 {
 
-class PeriodicTimer : public darc::primitive, public boost::asio::deadline_timer
+class periodic_timer : public darc::primitive, public boost::asio::deadline_timer
 {
 public:
   typedef boost::function<void()> CallbackType;
 
 protected:
-  typedef boost::shared_ptr<PeriodicTimer> Ptr;
+  typedef boost::shared_ptr<periodic_timer> Ptr;
 
   CallbackType callback_;
 
@@ -58,7 +58,7 @@ protected:
 
 public:
   template<typename T>
-  PeriodicTimer(T * owner, void (T::*callback)(), boost::posix_time::time_duration period) :
+  periodic_timer(T * owner, void (T::*callback)(), boost::posix_time::time_duration period) :
     darc::primitive(owner),
     boost::asio::deadline_timer(*(owner->io_service()), period),
     callback_(boost::bind(callback, owner)),
@@ -66,30 +66,30 @@ public:
   {
   }
 
-  const char * getTypeName()
+  const char * get_type_name()
   {
     return "PeriodicTimers";
   }
 
-  const int getTypeID()
+  const int get_type_id()
   {
     return 123;
   }
 
 protected:
-  void onStart()
+  void on_start()
   {
     expected_deadline_ = boost::posix_time::microsec_clock::universal_time() + period_;
     expires_from_now( period_ );
-    async_wait( boost::bind( &PeriodicTimer::handler, this, boost::asio::placeholders::error ) );
+    async_wait( boost::bind( &periodic_timer::handler, this, boost::asio::placeholders::error ) );
   }
 
-  void onStop()
+  void on_stop()
   {
     cancel();
   }
 
-  void onPause()
+  void on_pause()
   {
   }
 
@@ -115,7 +115,7 @@ protected:
       //DARC_INFO("Diff: %s", boost::posix_time::to_simple_string(diff).c_str());
       expected_deadline_ += period_;
       //    std::cout << diff.total_milliseconds() << std::endl;
-      async_wait( boost::bind( &PeriodicTimer::handler, this, boost::asio::placeholders::error ) );
+      async_wait( boost::bind( &periodic_timer::handler, this, boost::asio::placeholders::error ) );
 
       if(state_ == RUNNING)
       {
@@ -124,7 +124,7 @@ protected:
     }
   }
 
-  void setPeriod( boost::posix_time::time_duration new_period )
+  void set_period( boost::posix_time::time_duration new_period )
   {
     period_ = new_period;
   }

@@ -61,18 +61,18 @@ public:
   {
   }
 
-  void onAttach()
+  void on_attach()
   {
-    sub_ = pubsub::Subscriber<T>(*owner_->io_service(), owner_->component_manager()->message_service());
+    sub_ = pubsub::Subscriber<T>(*owner_->io_service(), owner_->get_component_manager()->get_message_service());
     sub_.addCallback(handler_);
   }
 
-  void onStart()
+  void on_start()
   {
     sub_.attach(topic_);
   }
 
-  void onStop()
+  void on_stop()
   {
     sub_.detach();
   }

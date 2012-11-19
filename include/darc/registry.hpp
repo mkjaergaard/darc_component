@@ -48,7 +48,7 @@ class component_manager;
 class Registry
 {
 private:
-  typedef boost::function<ComponentPtr(const std::string&, component_manager)> InstantiateComponentMethod;
+  typedef boost::function<component_ptr(const std::string&, component_manager)> InstantiateComponentMethod;
   typedef std::map<const std::string, InstantiateComponentMethod> ComponentListType;
 
   ComponentListType component_list_;
@@ -61,7 +61,7 @@ private:
 
 public:
   static int registerComponent(const std::string& component_name, InstantiateComponentMethod method);
-  static darc::ComponentPtr instantiateComponent(const std::string& instance_name, component_manager* mngr);
+  static darc::component_ptr instantiateComponent(const std::string& instance_name, component_manager* mngr);
 
 };
 
