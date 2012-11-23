@@ -108,7 +108,7 @@ public:
     owner::unpause_primitives();
   }
 
-  virtual void on attach()
+  virtual void on_attach()
   {
     trigger_on_attach();
   }

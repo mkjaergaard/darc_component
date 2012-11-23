@@ -56,7 +56,7 @@ public:
   virtual boost::asio::io_service * io_service() = 0;
   virtual const bool& is_attached() = 0;
   virtual const ID& get_id() = 0;
-  virtual component_manager* get_component_manager() = 0;
+  virtual darc::component_manager* get_component_manager() = 0;
 
   void start_primitives();
   void stop_primitives();
