@@ -48,6 +48,7 @@
 #include <darc/distributed_container/container_manager.hpp>
 #include <darc/ns_service.hpp>
 #include <darc/pubsub/message_service.hpp>
+#include <darc/system_signals.hpp>
 
 namespace darc
 {
@@ -71,6 +72,8 @@ private:
 
   thread_manager thread_manager_;
 
+  boost::scoped_ptr<boost::asio::io_service::work> keep_alive_;
+
 public:
   component_manager() :
     network_mngr_(io_service_, peer_),
@@ -78,6 +81,10 @@ public:
     ns_service_(peer_, &container_manager_),
     message_service_(peer_, io_service_, ns_service_)
   {
+    system_signals::sig_int_signal().connect(
+      boost::bind(&component_manager::stop_work, this));
+    system_signals::sig_term_signal().connect(
+      boost::bind(&component_manager::stop_work, this));
   }
 
   pubsub::message_service& get_message_service()
@@ -86,10 +93,16 @@ public:
   }
 
 protected:
+  void stop_work()
+  {
+    beam::glog<beam::Info>("Caught INT/TERM Signal");
+    keep_alive_.reset();
+  }
+
   void work()
   {
     beam::glog<beam::Info>("Running component_manager");
-    boost::asio::io_service::work keep_alive(io_service_);
+    keep_alive_.reset(new boost::asio::io_service::work(io_service_));
     io_service_.run();
   }
 

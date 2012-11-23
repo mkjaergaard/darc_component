@@ -60,6 +60,13 @@ private:
 
 protected:
   component();
+
+public:
+  ~component()
+  {
+    stop();
+  }
+
   void attach_to_manager(darc::component_manager * mngr);
   void set_name(const std::string& instance_name);
 
