@@ -44,10 +44,13 @@ namespace darc
 
 class thread_manager{
 protected:
-  typedef std::map<ID, boost::shared_ptr<boost::thread> > ThreadList;
+  typedef std::pair<boost::shared_ptr<boost::thread>,
+                    component_ptr> thread_entry_type;
+  typedef std::map<ID, thread_entry_type> ThreadList;
   ThreadList thread_list_;
 
 public:
+  ~thread_manager();
   void allocate_thread_and_run(component_ptr component);
   void stop_thread(component_ptr component);
 

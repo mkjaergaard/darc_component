@@ -101,13 +101,15 @@ void component::work()
   trigger_on_start();
   io_service_.reset();
   io_service_.run();
-  beam::glog<beam::Info>("Stopping Component",
+  beam::glog<beam::Info>("Component Stopped",
                          "Name", beam::arg<std::string>(name_));
 }
 
 void component::stop_work()
 {
-  stop_primitives();
+  beam::glog<beam::Info>("Stopping Component",
+                         "Name", beam::arg<std::string>(name_));
+	stop_primitives();
   keep_alive_.reset();
 }
 

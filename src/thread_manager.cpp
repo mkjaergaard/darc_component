@@ -40,6 +40,18 @@
 namespace darc
 {
 
+thread_manager::~thread_manager()
+{
+  beam::glog<beam::Info>("~thread_manager");
+  for(ThreadList::iterator it = thread_list_.begin();
+      it != thread_list_.end();
+      it++)
+  {
+    it->second.second->stop_work();
+    it->second.first->join();
+  }
+}
+
 void thread_manager::allocate_thread_and_run(component_ptr component)
 {
   thread_list_[component->getID()] =
@@ -50,7 +62,7 @@ void thread_manager::stop_thread(component_ptr component)
 {
   assert(thread_list_.count(component->getID()) != 0);
   component->stop_work();
-  thread_list_[component->getID()]->join();
+  thread_list_[component->getID()].first->join();
   thread_list_.erase(component->getID());
 }
 

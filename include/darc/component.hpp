@@ -64,7 +64,7 @@ protected:
 public:
   ~component()
   {
-    stop();
+    //todo: assert, is running
   }
 
   void attach_to_manager(darc::component_manager * mngr);

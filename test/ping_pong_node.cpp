@@ -18,4 +18,5 @@ int main(int argc, const char** argv)
   c2->run();
 
   mngr.run_current_thread();
+  beam::glog<beam::Info>("main finished");
 }

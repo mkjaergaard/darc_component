@@ -87,6 +87,11 @@ public:
       boost::bind(&component_manager::stop_work, this));
   }
 
+  ~component_manager()
+  {
+    beam::glog<beam::Info>("~component_manager");
+  }
+
   pubsub::message_service& get_message_service()
   {
     return message_service_;
