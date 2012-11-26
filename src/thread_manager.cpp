@@ -54,8 +54,15 @@ thread_manager::~thread_manager()
 
 void thread_manager::allocate_thread_and_run(component_ptr component)
 {
-  thread_list_[component->getID()] =
-    boost::make_shared<boost::thread>(boost::bind(&component::work, component));
+  assert(thread_list_.count(component->getID()) == 0);
+
+  thread_entry_type entry(
+    boost::make_shared<boost::thread>(boost::bind(&component::work, component)),
+    component);
+
+  thread_list_.insert(
+    ThreadList::value_type(component->getID(),
+                           entry));
 }
 
 void thread_manager::stop_thread(component_ptr component)
