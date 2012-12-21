@@ -9,4 +9,5 @@
   <build_depend>darc_common</build_depend>
   <build_depend>darc_ns</build_depend>
   <build_depend>darc_pubsub</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
 </package>
