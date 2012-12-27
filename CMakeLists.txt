@@ -8,7 +8,7 @@ catkin_package(
   LIBRARIES darc_component
 )
 
-find_package(catkin REQUIRED COMPONENTS beam darc_pubsub darc_common darc_ns)
+find_package(catkin REQUIRED COMPONENTS beam darc_pubsub darc_procedure darc_common darc_ns)
 find_package(Boost REQUIRED COMPONENTS system)
 
 
@@ -47,6 +47,17 @@ add_executable(my_pong_node
 )
 target_link_libraries(my_pong_node darc_component -lzmq)
 
+add_executable(my_client_node
+  test/client_node.cpp
+)
+target_link_libraries(my_client_node darc_component -lzmq)
+
+add_executable(my_server_node
+  test/server_node.cpp
+)
+target_link_libraries(my_server_node darc_component -lzmq)
+
+# old
 add_executable(my_node1
   test/node1.cpp
 )
