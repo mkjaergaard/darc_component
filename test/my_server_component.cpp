@@ -1,5 +1,5 @@
 #include <darc/component.hpp>
-#include <beam/glog.hpp>
+#include <iris/glog.hpp>
 #include <darc/periodic_timer.hpp>
 #include <darc/procedure_server.hpp>
 
@@ -17,7 +17,7 @@ public:
     server_(this, "my_proc",
 	    boost::bind(&my_server_component::call_handler, this, _1, _2))
   {
-    beam::glog<beam::Info>("my_server_component created");
+    iris::glog<iris::Info>("my_server_component created");
   }
 
 };

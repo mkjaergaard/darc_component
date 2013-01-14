@@ -39,7 +39,7 @@
 #include <boost/thread.hpp>
 #include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp>
-#include <beam/glog.hpp>
+#include <iris/glog.hpp>
 #include <darc/component_fwd.hpp>
 #include <darc/registry.hpp>
 #include <darc/peer.hpp>
@@ -92,7 +92,7 @@ public:
 
   ~component_manager()
   {
-    beam::glog<beam::Info>("~component_manager");
+    iris::glog<iris::Info>("~component_manager");
   }
 
   pubsub::message_service& get_message_service()
@@ -108,13 +108,13 @@ public:
 protected:
   void stop_work()
   {
-    beam::glog<beam::Info>("Caught INT/TERM Signal");
+    iris::glog<iris::Info>("Caught INT/TERM Signal");
     keep_alive_.reset();
   }
 
   void work()
   {
-    beam::glog<beam::Info>("Running component_manager");
+    iris::glog<iris::Info>("Running component_manager");
     keep_alive_.reset(new boost::asio::io_service::work(io_service_));
     io_service_.run();
   }

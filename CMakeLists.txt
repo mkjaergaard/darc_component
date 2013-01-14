@@ -8,7 +8,7 @@ catkin_package(
   LIBRARIES darc_component
 )
 
-find_package(catkin REQUIRED COMPONENTS beam darc_pubsub darc_procedure darc_common darc_ns)
+find_package(catkin REQUIRED COMPONENTS iris darc_pubsub darc_procedure darc_common darc_ns)
 find_package(Boost REQUIRED COMPONENTS system)
 
 

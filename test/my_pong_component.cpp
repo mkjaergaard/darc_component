@@ -1,5 +1,5 @@
 #include <darc/component.hpp>
-#include <beam/glog.hpp>
+#include <iris/glog.hpp>
 #include <darc/periodic_timer.hpp>
 #include "../include/darc/publisher.h"
 #include "../include/darc/subscriber.h"
@@ -13,7 +13,7 @@ class my_pong_component : public darc::component
 
   void handler(const boost::shared_ptr<const int>& msg_)
   {
-    //beam::glog<beam::Info>("Ping Recv");
+    //iris::glog<iris::Info>("Ping Recv");
     pong_pub_.publish(msg);
   }
 
@@ -23,7 +23,7 @@ public:
     ping_sub_(this, "ping", boost::bind(&my_pong_component::handler, this, _1)),
     msg(boost::make_shared<int>(5))
   {
-    beam::glog<beam::Info>("my_pong_component created");
+    iris::glog<iris::Info>("my_pong_component created");
   }
 
 };

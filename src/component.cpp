@@ -94,21 +94,21 @@ void component::unpause()
 
 void component::work()
 {
-  beam::glog<beam::Info>("Running Component",
-                         "Name", beam::arg<std::string>(name_));
+  iris::glog<iris::Info>("Running Component",
+                         "Name", iris::arg<std::string>(name_));
   keep_alive_.reset( new boost::asio::io_service::work(io_service_) );
   start_primitives();
   trigger_on_start();
   io_service_.reset();
   io_service_.run();
-  beam::glog<beam::Info>("Component Stopped",
-                         "Name", beam::arg<std::string>(name_));
+  iris::glog<iris::Info>("Component Stopped",
+                         "Name", iris::arg<std::string>(name_));
 }
 
 void component::stop_work()
 {
-  beam::glog<beam::Info>("Stopping Component",
-                         "Name", beam::arg<std::string>(name_));
+  iris::glog<iris::Info>("Stopping Component",
+                         "Name", iris::arg<std::string>(name_));
   stop_primitives();
   keep_alive_.reset();
 }

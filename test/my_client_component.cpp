@@ -1,5 +1,5 @@
 #include <darc/component.hpp>
-#include <beam/glog.hpp>
+#include <iris/glog.hpp>
 #include <darc/periodic_timer.hpp>
 #include <darc/procedure_client.hpp>
 
@@ -18,14 +18,14 @@ class my_client_component : public darc::component
     if(run_ == false)
     {
       count_ = 0;
-      beam::glog<beam::Info>("Start");
+      iris::glog<iris::Info>("Start");
       run_ = true;
       client_.call(msg);
     }
     else
     {
       run_ = false;
-      beam::glog<beam::Info>("Count", "Count", beam::arg<uint32_t>(count_));
+      iris::glog<iris::Info>("Count", "Count", iris::arg<uint32_t>(count_));
     }
   }
 
@@ -49,7 +49,7 @@ public:
     count_(0),
     msg(boost::make_shared<int>(5))
   {
-    beam::glog<beam::Info>("my_client_component created");
+    iris::glog<iris::Info>("my_client_component created");
   }
 
 };

@@ -1,11 +1,11 @@
 #include <darc/component_manager.hpp>
-#include <beam/glog.hpp>
+#include <iris/glog.hpp>
 
 #include "my_component1.cpp"
 
 int main(int argc, const char** argv)
 {
-  beam::glog<beam::Info>("Node Running");
+  iris::glog<iris::Info>("Node Running");
   darc::component_manager mngr;
   mngr.accept("zmq+tcp://127.0.0.1:5001");
   mngr.connect("zmq+tcp://127.0.0.1:5002");

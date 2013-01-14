@@ -1,12 +1,12 @@
 #include <darc/component_manager.hpp>
-#include <beam/glog.hpp>
+#include <iris/glog.hpp>
 
 #include "my_ping_component.cpp"
 #include "my_pong_component.cpp"
 
 int main(int argc, const char** argv)
 {
-  beam::glog<beam::Info>("Node Running");
+  iris::glog<iris::Info>("Node Running");
   darc::component_manager mngr;
   mngr.accept("zmq+tcp://127.0.0.1:5001");
   mngr.connect("zmq+tcp://127.0.0.1:5002");
@@ -18,5 +18,5 @@ int main(int argc, const char** argv)
   c2->run();
 
   mngr.run_current_thread();
-  beam::glog<beam::Info>("main finished");
+  iris::glog<iris::Info>("main finished");
 }
