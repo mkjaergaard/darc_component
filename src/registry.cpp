@@ -33,8 +33,8 @@
  * \author Morten Kjaergaard
  */
 
-#include <darc/registry.h>
-#include <darc/log.h>
+#include <darc/registry.hpp>
+#include <iris/glog.hpp>
 
 namespace darc
 {
@@ -59,21 +59,24 @@ int Registry::registerComponent(const std::string& component_name, InstantiateCo
 {
   Registry * inst = instance();
   inst->component_list_[component_name] = method;
-  DARC_INFO("Registered Component: %s", component_name.c_str());
+  iris::glog<iris::Info>("Registered Component",
+                         "Name", iris::arg<std::string>(component_name));
   return 1;
 }
 
-darc::component_ptr Registry::instantiateComponent(const std::string& instance_name, NodePtr node)
+darc::component_ptr Registry::instantiateComponent(const std::string& component_name, component_manager* mngr)
 {
   Registry * inst = instance();
-  if( inst->component_list_.count(instance_name) )
+  if( inst->component_list_.count(component_name) )
   {
-    DARC_INFO("Instantiating Component %s", instance_name.c_str());
-    return inst->component_list_[instance_name](instance_name, node);
+    iris::glog<iris::Info>("Instantiating Component",
+                           "Name", iris::arg<std::string>(component_name));
+    return inst->component_list_[component_name](component_name, mngr);
   }
   else
   {
-    DARC_FATAL("Component not registered %s", instance_name.c_str());
+    iris::glog<iris::Info>("Trying to instantiate unregistered component",
+                           "Name", iris::arg<std::string>(component_name));
     return darc::component_ptr();
   }
 }

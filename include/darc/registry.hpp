@@ -36,6 +36,8 @@
 #pragma once
 
 #include <map>
+#include <string>
+#include <vector>
 #include <boost/function.hpp>
 #include <darc/component_fwd.hpp>
 //#include <darc/component_manager_fwd.h>
@@ -48,7 +50,7 @@ class component_manager;
 class Registry
 {
 private:
-  typedef boost::function<component_ptr(const std::string&, component_manager)> InstantiateComponentMethod;
+  typedef boost::function<component_ptr(const std::string&, component_manager*)> InstantiateComponentMethod;
   typedef std::map<const std::string, InstantiateComponentMethod> ComponentListType;
 
   ComponentListType component_list_;
@@ -62,6 +64,19 @@ private:
 public:
   static int registerComponent(const std::string& component_name, InstantiateComponentMethod method);
   static darc::component_ptr instantiateComponent(const std::string& instance_name, component_manager* mngr);
+
+  // todo: thread problem
+  static std::vector<std::string> names()
+  {
+    std::vector<std::string> names;
+    for(ComponentListType::const_iterator it = instance()->component_list_.begin();
+        it != instance()->component_list_.end();
+        it++)
+    {
+      names.push_back(it->first);
+    }
+    return names;
+  }
 
 };
 

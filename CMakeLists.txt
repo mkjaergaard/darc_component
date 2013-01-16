@@ -6,6 +6,7 @@ find_package(catkin)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES darc_component
+  CATKIN_DEPENDS darc_common iris darc_ns darc_pubsub darc_procedure
 )
 
 find_package(catkin REQUIRED COMPONENTS iris darc_pubsub darc_procedure darc_common darc_ns)
@@ -21,9 +22,13 @@ add_library(darc_component
   src/component.cpp
   src/component_manager.cpp
   src/thread_manager.cpp
+  src/registry.cpp
 )
 
 target_link_libraries(darc_component ${catkin_LIBRARIES} -pthread)
+
+add_executable(autoload_peer src/autostart_peer.cpp)
+target_link_libraries(autoload_peer darc_component)
 
 add_library(my_component1
   test/my_component1.cpp
