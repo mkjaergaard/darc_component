@@ -80,7 +80,7 @@ public:
   component_manager() :
     network_mngr_(io_service_, peer_),
     container_manager_(peer_),
-    ns_service_(peer_, &container_manager_),
+    ns_service_(peer_),//, &container_manager_),
     message_service_(peer_, io_service_, ns_service_),
     procedure_service_(peer_, io_service_, ns_service_)
   {
@@ -92,7 +92,6 @@ public:
 
   ~component_manager()
   {
-    iris::glog<iris::Info>("~component_manager");
   }
 
   pubsub::message_service& get_message_service()

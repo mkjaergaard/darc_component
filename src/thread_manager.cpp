@@ -42,7 +42,6 @@ namespace darc
 
 thread_manager::~thread_manager()
 {
-  iris::glog<iris::Info>("~thread_manager");
   for(ThreadList::iterator it = thread_list_.begin();
       it != thread_list_.end();
       it++)
