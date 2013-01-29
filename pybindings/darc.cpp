@@ -13,12 +13,13 @@ using namespace boost::python;
 BOOST_PYTHON_MODULE(darc)
 {
   // Generic Stuff
-//  class_<std::vector<std::string> >("vector_string")
-//    .def(vector_indexing_suite<std::vector<std::string> >());
+  class_<std::vector<std::string> >("vector_string")
+    .def(vector_indexing_suite<std::vector<std::string> >());
 
   // DARC
   class_<darc::component_manager, boost::noncopyable>("component_manager")
     .def("run", &darc::component_manager::run)
+    .def("run_current_thread", &darc::component_manager::run_current_thread)
     .def("connect", &darc::component_manager::connect)
     .def("accept", &darc::component_manager::accept);
 
@@ -36,8 +37,7 @@ BOOST_PYTHON_MODULE(darc)
     .def("pause", &darc::component::pause)
     .def("unpause", &darc::component::unpause)
     .def("name", &darc::component::get_name)
-    .def("id", &darc::component::get_id, return_value_policy<copy_const_reference>())
-    .staticmethod("instantiate");
+    .def("id", &darc::component::get_id, return_value_policy<copy_const_reference>());
 
   class_<darc::component_loader>("component_loader", no_init)
     .def("load_component", &darc::component_loader::load_component)

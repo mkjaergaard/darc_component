@@ -30,5 +30,7 @@ add_executable(darc_component_manager
   src/component_manager_executable.cpp
 )
 target_link_libraries(darc_component_manager darc_component ${Boost_LIBRARIES})
+install(TARGETS darc_component_manager
+    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 add_subdirectory(pybindings)
