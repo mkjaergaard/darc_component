@@ -36,7 +36,6 @@
 #pragma once
 
 #include <dlfcn.h>
-#include <darc/registry.h>
 
 namespace darc
 {
