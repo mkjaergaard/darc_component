@@ -34,3 +34,12 @@ install(TARGETS darc_component_manager
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 add_subdirectory(pybindings)
+
+# Gtest
+catkin_add_gtest(darc_component_publisher_gtest test/publisher_gtest.cpp)
+target_link_libraries(darc_component_publisher_gtest
+  ${GTEST_BOTH_LIBRARIES}
+#  ${Boost_LIBRARIES}
+#  ${catkin_LIBRARIES}
+  darc_component
+  -pthread)

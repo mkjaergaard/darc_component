@@ -49,7 +49,7 @@ class component : public owner
 {
   friend class component_manager;
 
-private:
+protected:
   std::string name_;
   bool attached_;
   boost::asio::io_service io_service_;

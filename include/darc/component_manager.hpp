@@ -124,12 +124,21 @@ public:
     node_thread_ = boost::thread( boost::bind(&component_manager::work, this) );
   }
 
+  void poll()
+  {
+    io_service_.poll();
+  }
+
   void run_current_thread()
   {
     work();
   }
 
   void attach(component_ptr component);
+  void detach(ID& component_id)
+  {
+    component_instances_.erase(component_id);
+  }
 
   void run_component(const ID& id)
   {

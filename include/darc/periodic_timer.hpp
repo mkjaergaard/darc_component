@@ -66,6 +66,14 @@ public:
   {
   }
 
+  periodic_timer(darc::owner * owner, CallbackType callback, boost::posix_time::time_duration period, int) :
+    darc::primitive(owner),
+    boost::asio::deadline_timer(*(owner->io_service()), period),
+    callback_(callback),
+    period_(period)
+  {
+  }
+
   const char * get_type_name()
   {
     return "PeriodicTimers";
