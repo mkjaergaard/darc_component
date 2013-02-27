@@ -4,6 +4,7 @@
 #include <darc/component.hpp>
 #include <darc/publisher.h>
 #include <darc/subscriber.h>
+#include <darc/topic_event_listener.hpp>
 
 /// move to common
 #include <string>
@@ -117,11 +118,17 @@ class component2 : public darc::component
 {
 protected:
   darc::subscriber<std::string> sub_;
+  darc::topic_event_listener listener1_;
 
 public:
   darc::test::event_list* event_list_;
 
 protected:
+  void event_callback(bool event, const darc::ID& peer_id, const std::string& topic, const std::string& type)
+  {
+    event_list_->event_callback("component2_new_pub", topic, type);
+  }
+
   void callback(const boost::shared_ptr<const std::string>& data)
   {
     event_list_->event_callback("component2_sub", *data, "");
@@ -129,7 +136,8 @@ protected:
 
 public:
   component2() :
-    sub_(this, "/mytopic", boost::bind(&component2::callback, this, _1))
+    sub_(this, "/mytopic", boost::bind(&component2::callback, this, _1)),
+    listener1_(this, boost::bind(&component2::event_callback, this, _1, _2, _3, _4))
   {
   }
 
@@ -178,6 +186,10 @@ TEST_F(PubSubTest, PubSub)
   mngr2.connect("zmq+tcp://127.0.0.1:6000");
 
   sleep(1);
+
+  EXPECT_TRUE(event_list1.is_empty());
+  EXPECT_TRUE(event_list2.pop_type("component2_new_pub"));
+  EXPECT_TRUE(event_list2.is_empty());
 
   c1_1->publish("blah");
   sleep(1);
