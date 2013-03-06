@@ -3,7 +3,7 @@
 #include <darc/registry.hpp>
 #include <darc/component_loader.hpp>
 #include <iris/glog.hpp>
-
+#include <darc/network/address_in_use_exception.hpp>
 
 namespace po = boost::program_options;
 
@@ -43,8 +43,9 @@ int main(int argc, const char* argv[])
         mngr.accept(url);
         port_found = true;
       }
-      catch(std::exception& e) // todo: create address in use exception
+      catch(darc::network::address_in_use_exception& e)
       {
+        std::cout << e.what() << std::endl;
         mngr.connect(url);
       }
     }
