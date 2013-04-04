@@ -6,15 +6,13 @@ find_package(catkin)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES darc_component
-  CATKIN_DEPENDS darc_common iris darc_ns darc_pubsub darc_procedure
+  CATKIN_DEPENDS darc
 )
 
-find_package(catkin REQUIRED COMPONENTS iris darc_pubsub darc_procedure darc_common darc_ns)
-find_package(Boost REQUIRED COMPONENTS system thread)
+find_package(catkin REQUIRED COMPONENTS darc)
 
 include_directories(include)
 include_directories(${catkin_INCLUDE_DIRS})
-include_directories(${Boost_INCLUDE_DIRS})
 
 add_library(darc_component
   src/owner.cpp
@@ -24,7 +22,7 @@ add_library(darc_component
   src/thread_manager.cpp
   src/registry.cpp
 )
-target_link_libraries(darc_component ${catkin_LIBRARIES} -pthread -ldl ${Boost_LIBRARIES})
+target_link_libraries(darc_component ${catkin_LIBRARIES} -pthread -ldl)
 
 find_package(Boost REQUIRED COMPONENTS program_options)
 add_executable(darc_component_manager

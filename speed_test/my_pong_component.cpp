@@ -1,8 +1,8 @@
 #include <darc/component.hpp>
 #include <iris/glog.hpp>
 #include <darc/periodic_timer.hpp>
-#include "../include/darc/publisher.h"
-#include "../include/darc/subscriber.h"
+#include <darc/publisher.hpp>
+#include <darc/subscriber.hpp>
 
 class my_pong_component : public darc::component
 {

@@ -42,13 +42,12 @@
 #include <iris/glog.hpp>
 #include <darc/component_fwd.hpp>
 #include <darc/registry.hpp>
-#include <darc/peer.hpp>
+#include <darc/peer/peer.hpp>
 #include <darc/network/network_manager.hpp>
 #include <darc/thread_manager.hpp>
-#include <darc/distributed_container/container_manager.hpp>
-#include <darc/ns_service.hpp>
-#include <darc/pubsub/message_service.hpp>
-#include <darc/procedure/procedure_service.hpp>
+#include <darc/ns/ns_service.hpp>
+#include <darc/primitives/pubsub/message_service.hpp>
+//#include <darc/primitives/procedure/procedure_service.hpp>
 #include <darc/system_signals.hpp>
 
 namespace darc
@@ -64,10 +63,9 @@ private:
   darc::network::network_manager network_mngr_;
 
   // services
-  darc::distributed_container::container_manager container_manager_;
   darc::ns_service ns_service_;
   pubsub::message_service message_service_;
-  procedure::procedure_service procedure_service_;
+//  procedure::procedure_service procedure_service_;
 
   typedef std::map<ID, component_ptr> ComponentInstancesList;
   ComponentInstancesList component_instances_;
@@ -79,10 +77,9 @@ private:
 public:
   component_manager() :
     network_mngr_(io_service_, peer_),
-    container_manager_(peer_),
     ns_service_(peer_),//, &container_manager_),
-    message_service_(peer_, io_service_, ns_service_),
-    procedure_service_(peer_, io_service_, ns_service_)
+    message_service_(peer_, io_service_, ns_service_)//,
+//    procedure_service_(peer_, io_service_, ns_service_)
   {
     system_signals::sig_int_signal().connect(
       boost::bind(&component_manager::stop_work, this));
@@ -98,12 +95,12 @@ public:
   {
     return message_service_;
   }
-
+/*
   procedure::procedure_service& get_procedure_service()
   {
     return procedure_service_;
   }
-
+*/
 protected:
   void stop_work()
   {

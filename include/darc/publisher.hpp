@@ -37,7 +37,7 @@
 
 #include <darc/primitive.hpp>
 #include <darc/owner.hpp>
-#include <darc/pubsub/publisher.hpp>
+#include <darc/primitives/pubsub/publisher.hpp>
 
 namespace darc
 {
