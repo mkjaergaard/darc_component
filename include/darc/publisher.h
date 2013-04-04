@@ -56,7 +56,12 @@ public:
   {
   }
 
-  void publish(boost::shared_ptr<const T> msg)
+  void publish(const boost::shared_ptr<const T>& msg)
+  {
+    pub_.publish(msg);
+  }
+
+  void publish(const T& msg)
   {
     pub_.publish(msg);
   }

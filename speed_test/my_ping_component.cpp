@@ -31,11 +31,11 @@ class my_ping_component : public darc::component
     }
   }
 
-  void handler(const boost::shared_ptr<const int>& msg)
+  void handler(const int& msg_)
   {
     //iris::glog<iris::Info>("Pong Recv");
     count_++;
-    ping_pub_.publish(msg);
+    ping_pub_.publish(msg_);
   }
 
 public:
@@ -51,3 +51,5 @@ public:
   }
 
 };
+
+DARC_REGISTER_COMPONENT(my_ping_component)

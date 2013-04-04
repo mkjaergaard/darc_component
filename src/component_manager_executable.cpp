@@ -69,6 +69,7 @@ int main(int argc, const char* argv[])
       darc::component_ptr component = darc::Registry::instantiateComponent(*it, &mngr);
       assert(component.get());
       component->run();
+      sleep(2);
     }
   }
   else

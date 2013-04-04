@@ -11,7 +11,7 @@ class my_pong_component : public darc::component
 
   boost::shared_ptr<int> msg;
 
-  void handler(const boost::shared_ptr<const int>& msg_)
+  void handler(const int& msg_)
   {
     //iris::glog<iris::Info>("Ping Recv");
     pong_pub_.publish(msg);
@@ -27,3 +27,5 @@ public:
   }
 
 };
+
+DARC_REGISTER_COMPONENT(my_pong_component)

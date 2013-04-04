@@ -61,6 +61,11 @@ public:
   {
   }
 
+  ~subscriber()
+  {
+    std::cout << "~subscriber" << std::endl;
+  }
+
   void on_attach()
   {
     sub_ = pubsub::subscriber<T>(*owner_->io_service(), owner_->get_component_manager()->get_message_service());
